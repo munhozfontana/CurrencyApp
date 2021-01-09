@@ -1,67 +1,85 @@
+import 'package:conversor_moedas/pages/conversor/conversor.dart';
+import 'package:conversor_moedas/pages/conversor/conversor_controller.dart';
+import 'package:conversor_moedas/pages/lista_moedas.dart';
+import 'package:conversor_moedas/services/models/liveCurrency.dart';
 import 'package:flutter/material.dart';
+import 'package:nested/nested.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  const MyApp({Key key}) : super(key: key);
+
+  List<SingleChildWidget> get providers {
+    return [
+      ChangeNotifierProvider<MainController>.value(value: MainController()),
+      ChangeNotifierProxyProvider<MainController, ConversorController>(
+        update: (context, mainController, previous) {
+          return ConversorController(mainController: mainController);
+        },
+        create: (context) => ConversorController(),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiProvider(
+      providers: providers,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "Flutter Demo",
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: HomeWidget(),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class HomeWidget extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeWidgetState createState() => _HomeWidgetState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("provider"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: Container(
+        child: Center(
+          child: Consumer2<ConversorController, MainController>(
+            builder: (context, conversor, main, child) => GestureDetector(
+              onTap: () => conversor.listCurrency(),
+              child: Text(
+                main.loading.toString(),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class MainController extends ChangeNotifier {
+  int selectedIndex = 0;
+  bool loading = false;
+
+  void changeIndex(index) {
+    selectedIndex = index;
+  }
+
+  void changeLoading() {
+    loading = !loading;
+    notifyListeners();
   }
 }
