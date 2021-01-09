@@ -1,11 +1,7 @@
 import 'dart:async';
 
-import 'package:conversor_moedas/main.dart';
-import 'package:conversor_moedas/pages/conversor/conversor_controller.dart';
-import 'package:conversor_moedas/services/currency_api_impl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Conversor extends StatefulWidget {
   final String title;

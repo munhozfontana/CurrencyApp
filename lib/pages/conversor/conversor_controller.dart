@@ -1,8 +1,7 @@
+import 'package:conversor_moedas/main_contoller.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:conversor_moedas/main.dart';
 import 'package:conversor_moedas/services/currency_api_impl.dart';
-import 'package:conversor_moedas/services/models/liveCurrency.dart';
 
 class ConversorController extends ChangeNotifier {
   final CurrencyApiImpl currencyApi;

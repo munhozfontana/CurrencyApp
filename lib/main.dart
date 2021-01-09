@@ -1,7 +1,6 @@
-import 'package:conversor_moedas/pages/conversor/conversor.dart';
+import 'package:conversor_moedas/initial_widget.dart';
+import 'package:conversor_moedas/main_contoller.dart';
 import 'package:conversor_moedas/pages/conversor/conversor_controller.dart';
-import 'package:conversor_moedas/pages/lista_moedas.dart';
-import 'package:conversor_moedas/services/models/liveCurrency.dart';
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
@@ -36,50 +35,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomeWidget(),
+        home: InitialWidget(),
       ),
     );
-  }
-}
-
-class HomeWidget extends StatefulWidget {
-  @override
-  _HomeWidgetState createState() => _HomeWidgetState();
-}
-
-class _HomeWidgetState extends State<HomeWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("provider"),
-      ),
-      body: Container(
-        child: Center(
-          child: Consumer2<ConversorController, MainController>(
-            builder: (context, conversor, main, child) => GestureDetector(
-              onTap: () => conversor.listCurrency(),
-              child: Text(
-                main.loading.toString(),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class MainController extends ChangeNotifier {
-  int selectedIndex = 0;
-  bool loading = false;
-
-  void changeIndex(index) {
-    selectedIndex = index;
-  }
-
-  void changeLoading() {
-    loading = !loading;
-    notifyListeners();
   }
 }
