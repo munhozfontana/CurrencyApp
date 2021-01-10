@@ -18,8 +18,7 @@ class _ConversorState extends State<Conversor> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => context.read<ConversorController>().listCurrency());
-    Future.microtask(() => context.read<ConversorController>().liveCurrency());
+    Future.microtask(() => context.read<ConversorController>().init());
   }
 
   @override
@@ -31,7 +30,6 @@ class _ConversorState extends State<Conversor> {
         return AddLoading(
           loading: controller.loading,
           child: Container(
-            padding: EdgeInsets.all(screenSize.width * .1),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,7 +44,7 @@ class _ConversorState extends State<Conversor> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      width: screenSize.width * .3,
+                      width: screenSize.width * .45,
                       child: DropdownButton<String>(
                         value: controller.selectFromCountry?.value,
                         icon: Icon(Icons.arrow_downward),
@@ -62,7 +60,7 @@ class _ConversorState extends State<Conversor> {
                       ),
                     ),
                     Container(
-                      width: screenSize.width * .3,
+                      width: screenSize.width * .45,
                       child: DropdownButton<String>(
                           value: controller.selectToCountry?.value,
                           icon: Icon(Icons.arrow_downward),
@@ -81,7 +79,8 @@ class _ConversorState extends State<Conversor> {
                 TextFormField(
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'(^\-?\d*\.?\d*)$')),
                   ],
                   onChanged: controller.onChangedMoney,
                 ),

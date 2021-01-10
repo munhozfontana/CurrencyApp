@@ -4,7 +4,8 @@ import 'package:conversor_moedas/domain/entities/currency.dart';
 import 'package:conversor_moedas/domain/entities/currency_live.dart';
 import 'package:conversor_moedas/domain/usecases/currency_usecase.dart';
 import 'package:conversor_moedas/domain/usecases/no_params.dart';
-import 'package:conversor_moedas/presentation/providers/loading_controller.dart';
+import 'package:conversor_moedas/presentation/providers/utils/loading_controller.dart';
+import 'package:conversor_moedas/presentation/providers/utils/utils_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,29 +27,41 @@ class ConversorController extends LoadingController {
     @required this.currencyListUseCase,
   });
 
-  Future<void> liveCurrency() async {
+  Future<void> init() async {
     changeLoading(true);
-    var res = await currencyLiveUseCase(NoParams());
-
-    res.fold(
-      (failure) => print(failure),
-      (response) => resLiveCurrency = response,
-    );
-
+    await listCurrency();
+    await liveCurrency();
     changeLoading(false);
   }
 
-  Future<void> listCurrency() async {
-    changeLoading(true);
-
-    var res = await currencyListUseCase(NoParams());
-
+  Future<void> liveCurrency() async {
+    var res = await Future.delayed(
+      Duration(milliseconds: 5),
+      () => currencyLiveUseCase(NoParams()),
+    );
     res.fold(
       (failure) => print(failure),
-      (response) => toDropDownMenu(response.toJson(), "currencies"),
+      (response) {
+        resLiveCurrency = response;
+      },
     );
+  }
 
-    changeLoading(false);
+  Future<void> listCurrency() async {
+    var res = await Future.delayed(
+        Duration(milliseconds: 5), () => currencyListUseCase(NoParams()));
+    res.fold(
+      (failure) => print(failure),
+      (response) {
+        listDropDown =
+            UtilsProviders.jsonToDowpDown(response.toJson(), "currencies");
+
+        if (listDropDown.isNotEmpty) {
+          changeSelectFromCountry(listDropDown.first.value);
+          changeSelectToCountry(listDropDown.first.value);
+        }
+      },
+    );
   }
 
   void changeSelectFromCountry(String code) {
@@ -65,10 +78,6 @@ class ConversorController extends LoadingController {
 
   String calculateCurrency(String key, String key2, String moneyValue) {
     if (resLiveCurrency != null) {
-      int dolar = resLiveCurrency.quotes.uSDUSD;
-
-      print(dolar);
-
       dynamic moedaOrigem = (resLiveCurrency
                   .toJson()['quotes']
                   .entries
@@ -83,34 +92,17 @@ class ConversorController extends LoadingController {
               as MapEntry)
           .value;
 
-      ;
-
-      return (((1 / moedaOrigem) * moedaDestino) *
-              (moneyValue == null || moneyValue.isEmpty
-                  ? 0
-                  : double.parse(moneyValue)))
-          .toString();
+      return _calcCoin(moedaOrigem, moedaDestino, moneyValue)
+          .toStringAsFixed(2);
     }
     return "Escolha a moeda de origem e destino";
   }
 
-  void toDropDownMenu(Map<String, dynamic> json, String key) {
-    listDropDown = json[key]
-        .entries
-        .map<DropdownMenuItem<String>>(
-            (MapEntry<String, dynamic> item) => DropdownMenuItem<String>(
-                  value: item.key.toString(),
-                  child: Text(
-                    item.value.toString(),
-                  ),
-                ))
-        .toList();
-
-    if (listDropDown.isNotEmpty) {
-      changeSelectFromCountry(listDropDown.first.value);
-      changeSelectToCountry(listDropDown.first.value);
-    }
-    notifyListeners();
+  double _calcCoin(moedaOrigem, moedaDestino, String moneyValue) {
+    return (((1 / moedaOrigem) * moedaDestino) *
+        (moneyValue == null || moneyValue.isEmpty
+            ? 0
+            : double.parse(moneyValue)));
   }
 
   void onChangedMoney(String value) {

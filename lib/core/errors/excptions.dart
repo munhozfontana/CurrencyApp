@@ -15,3 +15,9 @@ class InternalServerApiException extends ServerApiException {
 
   InternalServerApiException({this.error});
 }
+
+class ClientServerUseCaseException extends ServerApiException {
+  final String error;
+
+  ClientServerUseCaseException({this.error});
+}
