@@ -1,4 +1,7 @@
+import 'package:conversor_moedas/core/utils/conectivity_adapter.dart';
 import 'package:conversor_moedas/data/datasources/currency_api.dart';
+import 'package:conversor_moedas/data/repositories/currency_repository.dart';
+import 'package:conversor_moedas/domain/usecases/currency_usecase.dart';
 import 'package:conversor_moedas/initial_widget.dart';
 import 'package:conversor_moedas/presentation/providers/conversor_controller.dart';
 import 'package:conversor_moedas/presentation/providers/main_contoller.dart';
@@ -17,9 +20,21 @@ class MyApp extends StatelessWidget {
     return [
       ChangeNotifierProvider<MainController>.value(value: MainController()),
       ChangeNotifierProvider<ConversorController>.value(
-          value: ConversorController(
-        currencyApi: CurrencyApiImpl(),
-      )),
+        value: ConversorController(
+          currencyLiveUseCase: CurrencyLiveUseCase(
+            currencyRepository: CurrencyRepositoryImpl(
+              currencyoApi: CurrencyApiImpl(),
+              connectivityAdapter: ConnectivityAdapterImpl(),
+            ),
+          ),
+          currencyListUseCase: CurrencyListUseCase(
+            currencyRepository: CurrencyRepositoryImpl(
+              currencyoApi: CurrencyApiImpl(),
+              connectivityAdapter: ConnectivityAdapterImpl(),
+            ),
+          ),
+        ),
+      ),
     ];
   }
 

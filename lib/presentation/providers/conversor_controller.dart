@@ -1,70 +1,120 @@
 import 'dart:async';
 
-import 'package:conversor_moedas/data/datasources/currency_api.dart';
 import 'package:conversor_moedas/domain/entities/currency.dart';
 import 'package:conversor_moedas/domain/entities/currency_live.dart';
+import 'package:conversor_moedas/domain/usecases/currency_usecase.dart';
+import 'package:conversor_moedas/domain/usecases/no_params.dart';
+import 'package:conversor_moedas/presentation/providers/loading_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ConversorController extends LoadingController {
-  final CurrencyApi currencyApi;
-  CurrencyLive resLiveCurrency = CurrencyLive();
-  Currency resListCurrency = Currency();
+  final CurrencyLiveUseCase currencyLiveUseCase;
+  final CurrencyListUseCase currencyListUseCase;
 
-  Currency selectFromCountry;
-  Currency selectToCountry;
+  DropdownMenuItem<String> selectFromCountry;
+  DropdownMenuItem<String> selectToCountry;
+
+  CurrencyLive resLiveCurrency;
+  Currency resListCurrency;
+  String money;
+
+  List<DropdownMenuItem<String>> listDropDown = [];
 
   ConversorController({
-    @required this.currencyApi,
+    @required this.currencyLiveUseCase,
+    @required this.currencyListUseCase,
   });
 
   Future<void> liveCurrency() async {
     changeLoading(true);
-    resLiveCurrency =
-        await Future.delayed(Duration(seconds: 1), () => currencyApi.live());
+    var res = await currencyLiveUseCase(NoParams());
+
+    res.fold(
+      (failure) => print(failure),
+      (response) => resLiveCurrency = response,
+    );
+
     changeLoading(false);
   }
 
   Future<void> listCurrency() async {
     changeLoading(true);
-    resListCurrency =
-        await Future.delayed(Duration(seconds: 1), () => currencyApi.list());
 
-    resListCurrency
-        .toJson()['currencies']
-        .entries
-        .forEach((value) => print(value));
+    var res = await currencyListUseCase(NoParams());
 
-    // if (resListCurrency.isNotEmpty) {
-    //   changeSelectFromCountry(resListCurrency.first.code);
-    //   changeSelectToCountry(resListCurrency.first.code);
-    // }
-    // resListCurrency.map((value) => value.name);
+    res.fold(
+      (failure) => print(failure),
+      (response) => toDropDownMenu(response.toJson(), "currencies"),
+    );
+
     changeLoading(false);
   }
 
   void changeSelectFromCountry(String code) {
-    // selectFromCountry =
-    //     resListCurrency.singleWhere((value) => value.code == code);
+    selectFromCountry =
+        listDropDown.singleWhere((DropdownMenuItem item) => item.value == code);
     notifyListeners();
   }
 
   void changeSelectToCountry(String code) {
-    // selectToCountry =
-    //     resListCurrency.singleWhere((value) => value.code == code);
+    selectToCountry =
+        listDropDown.singleWhere((DropdownMenuItem item) => item.value == code);
     notifyListeners();
   }
 
-  void calculateCurrency(Currency value, Currency value2) {
-    // print('name: ${value?.name}  code: ${value?.code}');
-    // print('name: ${value2?.name}  code: ${value2?.code}');
+  String calculateCurrency(String key, String key2, String moneyValue) {
+    if (resLiveCurrency != null) {
+      int dolar = resLiveCurrency.quotes.uSDUSD;
+
+      print(dolar);
+
+      dynamic moedaOrigem = (resLiveCurrency
+                  .toJson()['quotes']
+                  .entries
+                  .singleWhere((MapEntry item) => '${item.key}' == 'USD${key}')
+              as MapEntry)
+          .value;
+
+      dynamic moedaDestino = (resLiveCurrency
+                  .toJson()['quotes']
+                  .entries
+                  .singleWhere((MapEntry item) => '${item.key}' == 'USD${key2}')
+              as MapEntry)
+          .value;
+
+      ;
+
+      return (((1 / moedaOrigem) * moedaDestino) *
+              (moneyValue == null || moneyValue.isEmpty
+                  ? 0
+                  : double.parse(moneyValue)))
+          .toString();
+    }
+    return "Escolha a moeda de origem e destino";
   }
-}
 
-class LoadingController with ChangeNotifier {
-  bool loading = false;
+  void toDropDownMenu(Map<String, dynamic> json, String key) {
+    listDropDown = json[key]
+        .entries
+        .map<DropdownMenuItem<String>>(
+            (MapEntry<String, dynamic> item) => DropdownMenuItem<String>(
+                  value: item.key.toString(),
+                  child: Text(
+                    item.value.toString(),
+                  ),
+                ))
+        .toList();
 
-  void changeLoading(bool value) {
-    loading = value;
+    if (listDropDown.isNotEmpty) {
+      changeSelectFromCountry(listDropDown.first.value);
+      changeSelectToCountry(listDropDown.first.value);
+    }
+    notifyListeners();
+  }
+
+  void onChangedMoney(String value) {
+    money = value;
     notifyListeners();
   }
 }
