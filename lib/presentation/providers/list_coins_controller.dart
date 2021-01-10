@@ -8,6 +8,8 @@ import 'package:conversor_moedas/presentation/vo/list_item.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 
+enum OrderBy { normal, invert }
+
 class ListCoinsController extends LoadingController {
   final CurrencyListUseCase currencyListUseCase;
 
@@ -16,6 +18,8 @@ class ListCoinsController extends LoadingController {
   Either<Failure, Currency> res;
 
   String textFileFind = "";
+
+  OrderBy filterOrderBy = OrderBy.normal;
 
   ListCoinsController({
     @required this.currencyListUseCase,
@@ -30,6 +34,7 @@ class ListCoinsController extends LoadingController {
       (success) {
         list = UtilsProviders.jsonToListItem(success.toJson(), "currencies");
         filterList = list;
+        toNormal();
       },
     );
   }
@@ -39,5 +44,29 @@ class ListCoinsController extends LoadingController {
     textFileFind = text;
     filterList = UtilsProviders.filterByTitle(list, text);
     notifyListeners();
+  }
+
+  void orderBy() {
+    if (filterOrderBy == OrderBy.normal) {
+      toNormal();
+    } else {
+      toInvert();
+    }
+
+    notifyListeners();
+  }
+
+  void toInvert() {
+    filterOrderBy = OrderBy.normal;
+    filterList.sort((a, b) {
+      return b.title.toLowerCase().compareTo(a.title.toLowerCase());
+    });
+  }
+
+  void toNormal() {
+    filterOrderBy = OrderBy.invert;
+    filterList.sort((a, b) {
+      return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+    });
   }
 }

@@ -33,8 +33,17 @@ class _ListCoinsState extends State<ListCoins> {
                       height: constraints.maxHeight * .2,
                       width: constraints.maxWidth * .9,
                       child: TextFormField(
-                        decoration: FormStyle().getInputDecorator(
-                            icon: Icon(Icons.find_in_page_rounded)),
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.find_in_page),
+                          hintText: "Enter a message",
+                          suffixIcon: IconButton(
+                            onPressed: controller.orderBy,
+                            icon: Icon(
+                                controller.filterOrderBy == OrderBy.normal
+                                    ? Icons.arrow_downward
+                                    : Icons.arrow_upward),
+                          ),
+                        ),
                         keyboardType: TextInputType.text,
                         onChanged: controller.filter,
                       ),
