@@ -1,8 +1,8 @@
-import 'package:conversor_moedas/core/components/global_app_bar.dart';
-import 'package:conversor_moedas/core/components/global_bottom_navigation_bar.dart';
-import 'package:conversor_moedas/main_contoller.dart';
-import 'package:conversor_moedas/pages/conversor/conversor.dart';
-import 'package:conversor_moedas/pages/lista_moedas.dart';
+import 'package:conversor_moedas/presentation/components/global_app_bar.dart';
+import 'package:conversor_moedas/presentation/components/global_bottom_navigation_bar.dart';
+import 'package:conversor_moedas/presentation/pages/conversor.dart';
+import 'package:conversor_moedas/presentation/pages/lista_moedas.dart';
+import 'package:conversor_moedas/presentation/providers/main_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,17 +18,39 @@ class _InitialWidgetState extends State<InitialWidget> {
       appBar: GlobalAppBar().build(context),
       bottomNavigationBar: GlobalBottomNavigationBar(),
       body: Consumer<MainController>(
-        builder: (context, main, child) {
-          return main.loading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : <Widget>[
-                  Conversor(),
-                  ListaMoedas(),
-                ].elementAt(0);
+        builder: (_, main, child) {
+          return <Widget>[
+            Conversor(),
+            ListaMoedas(),
+          ].elementAt(main.selectedIndex);
         },
       ),
+    );
+  }
+}
+
+class AddLoading extends StatelessWidget {
+  final bool loading;
+  final Widget child;
+
+  const AddLoading({
+    this.loading = false,
+    @required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        if (loading)
+          Container(
+            color: Colors.grey.withOpacity(.3),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+      ],
     );
   }
 }

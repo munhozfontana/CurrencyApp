@@ -1,0 +1,21 @@
+import 'package:connectivity/connectivity.dart';
+
+abstract class ConnectivityAdapter {
+  Future<bool> isConnected();
+}
+
+class ConnectivityAdapterImpl implements ConnectivityAdapter {
+  Connectivity connectivity = Connectivity();
+
+  @override
+  Future<bool> isConnected() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}

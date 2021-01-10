@@ -1,6 +1,7 @@
+import 'package:conversor_moedas/data/datasources/currency_api.dart';
 import 'package:conversor_moedas/initial_widget.dart';
-import 'package:conversor_moedas/main_contoller.dart';
-import 'package:conversor_moedas/pages/conversor/conversor_controller.dart';
+import 'package:conversor_moedas/presentation/providers/conversor_controller.dart';
+import 'package:conversor_moedas/presentation/providers/main_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
@@ -15,12 +16,10 @@ class MyApp extends StatelessWidget {
   List<SingleChildWidget> get providers {
     return [
       ChangeNotifierProvider<MainController>.value(value: MainController()),
-      ChangeNotifierProxyProvider<MainController, ConversorController>(
-        update: (context, mainController, previous) {
-          return ConversorController(mainController: mainController);
-        },
-        create: (context) => ConversorController(),
-      ),
+      ChangeNotifierProvider<ConversorController>.value(
+          value: ConversorController(
+        currencyApi: CurrencyApiImpl(),
+      )),
     ];
   }
 

@@ -1,12 +1,12 @@
-class LiveCurrency {
+class CurrencyLive {
   bool success;
   String terms;
   String privacy;
-  int timestamp;
+  double timestamp;
   String source;
   Quotes quotes;
 
-  LiveCurrency(
+  CurrencyLive(
       {this.success,
       this.terms,
       this.privacy,
@@ -14,7 +14,7 @@ class LiveCurrency {
       this.source,
       this.quotes});
 
-  LiveCurrency.fromJson(Map<String, dynamic> json) {
+  CurrencyLive.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     terms = json['terms'];
     privacy = json['privacy'];
@@ -55,7 +55,7 @@ class Quotes {
   double uSDBGN;
   double uSDBHD;
   double uSDBIF;
-  int uSDBMD;
+  double uSDBMD;
   double uSDBND;
   double uSDBOB;
   double uSDBRL;
@@ -64,7 +64,7 @@ class Quotes {
   double uSDBTN;
   double uSDBWP;
   double uSDBYN;
-  int uSDBYR;
+  double uSDBYR;
   double uSDBZD;
   double uSDCAD;
   double uSDCDF;
@@ -74,7 +74,7 @@ class Quotes {
   double uSDCNY;
   double uSDCOP;
   double uSDCRC;
-  int uSDCUC;
+  double uSDCUC;
   double uSDCUP;
   double uSDCVE;
   double uSDCZK;
@@ -188,7 +188,7 @@ class Quotes {
   double uSDTZS;
   double uSDUAH;
   double uSDUGX;
-  int uSDUSD;
+  double uSDUSD;
   double uSDUYU;
   double uSDUZS;
   double uSDVEF;
