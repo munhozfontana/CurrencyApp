@@ -1,4 +1,4 @@
-import 'package:conversor_moedas/presentation/providers/utils/main_contoller.dart';
+import 'package:conversor_moedas/presentation/providers/main_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

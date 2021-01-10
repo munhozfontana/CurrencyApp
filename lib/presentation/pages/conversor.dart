@@ -1,3 +1,4 @@
+import 'package:conversor_moedas/core/styles/forms_style.dart';
 import 'package:conversor_moedas/initial_widget.dart';
 import 'package:conversor_moedas/presentation/providers/conversor_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -78,6 +79,8 @@ class _ConversorState extends State<Conversor> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
+                  decoration: FormStyle()
+                      .getInputDecorator(icon: Icon(Icons.attach_money)),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                         RegExp(r'(^\-?\d*\.?\d*)$')),

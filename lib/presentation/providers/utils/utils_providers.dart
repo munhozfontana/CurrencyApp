@@ -21,4 +21,14 @@ class UtilsProviders {
       return ListItem(item.key.toString(), item.value.toString());
     }).toList();
   }
+
+  static List<ListItem> filterByTitle(List<ListItem> list, String text) {
+    if (text.isNotEmpty) {
+      return list
+          .where(
+              (item) => item.title.toUpperCase().contains(text.toUpperCase()))
+          .toList();
+    }
+    return list;
+  }
 }

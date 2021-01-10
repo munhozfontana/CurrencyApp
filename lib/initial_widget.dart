@@ -2,7 +2,7 @@ import 'package:conversor_moedas/presentation/components/global_app_bar.dart';
 import 'package:conversor_moedas/presentation/components/global_bottom_navigation_bar.dart';
 import 'package:conversor_moedas/presentation/pages/conversor.dart';
 import 'package:conversor_moedas/presentation/pages/list_coins.dart';
-import 'package:conversor_moedas/presentation/providers/utils/main_contoller.dart';
+import 'package:conversor_moedas/presentation/providers/main_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

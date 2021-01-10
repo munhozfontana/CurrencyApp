@@ -5,7 +5,7 @@ import 'package:conversor_moedas/domain/usecases/currency_usecase.dart';
 import 'package:conversor_moedas/initial_widget.dart';
 import 'package:conversor_moedas/presentation/providers/conversor_controller.dart';
 import 'package:conversor_moedas/presentation/providers/list_coins_controller.dart';
-import 'package:conversor_moedas/presentation/providers/utils/main_contoller.dart';
+import 'package:conversor_moedas/presentation/providers/main_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';

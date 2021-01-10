@@ -12,7 +12,10 @@ class ListCoinsController extends LoadingController {
   final CurrencyListUseCase currencyListUseCase;
 
   List<ListItem> list = [];
+  List<ListItem> filterList = [];
   Either<Failure, Currency> res;
+
+  String textFileFind = "";
 
   ListCoinsController({
     @required this.currencyListUseCase,
@@ -26,7 +29,15 @@ class ListCoinsController extends LoadingController {
       (failure) => failure,
       (success) {
         list = UtilsProviders.jsonToListItem(success.toJson(), "currencies");
+        filterList = list;
       },
     );
+  }
+
+  void filter(String text) {
+    print(text);
+    textFileFind = text;
+    filterList = UtilsProviders.filterByTitle(list, text);
+    notifyListeners();
   }
 }
