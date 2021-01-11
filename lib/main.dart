@@ -1,7 +1,6 @@
 import 'package:conversor_moedas/core/utils/conectivity_adapter.dart';
 import 'package:conversor_moedas/data/datasources/apis/currency_api_impl.dart';
 import 'package:conversor_moedas/data/datasources/database/currency_database_impl.dart';
-import 'package:conversor_moedas/data/datasources/database/repositories/currency_database.dart';
 import 'package:conversor_moedas/data/repositories/currency_repository_impl.dart';
 import 'package:conversor_moedas/domain/usecases/currency_usecase.dart';
 import 'package:conversor_moedas/initial_widget.dart';
@@ -11,6 +10,7 @@ import 'package:conversor_moedas/presentation/providers/main_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -26,9 +26,11 @@ class MyApp extends StatelessWidget {
         value: ListCoinsController(
           currencyListUseCase: CurrencyListUseCase(
             currencyRepository: CurrencyRepositoryImpl(
-                currencyoApi: CurrencyApiImpl(),
+                currencyoApi: CurrencyApiImpl(
+                  client: http.Client(),
+                ),
                 connectivityAdapter: ConnectivityAdapterImpl(),
-                currencyDatabase: SharedPreferencesDatabase()),
+                currencyDatabase: CurrencyDatabaseImpl()),
           ),
         ),
       ),
@@ -36,15 +38,15 @@ class MyApp extends StatelessWidget {
         value: ConversorController(
           currencyLiveUseCase: CurrencyLiveUseCase(
             currencyRepository: CurrencyRepositoryImpl(
-              currencyDatabase: SharedPreferencesDatabase(),
-              currencyoApi: CurrencyApiImpl(),
+              currencyDatabase: CurrencyDatabaseImpl(),
+              currencyoApi: CurrencyApiImpl(client: http.Client()),
               connectivityAdapter: ConnectivityAdapterImpl(),
             ),
           ),
           currencyListUseCase: CurrencyListUseCase(
             currencyRepository: CurrencyRepositoryImpl(
-              currencyDatabase: SharedPreferencesDatabase(),
-              currencyoApi: CurrencyApiImpl(),
+              currencyDatabase: CurrencyDatabaseImpl(),
+              currencyoApi: CurrencyApiImpl(client: http.Client()),
               connectivityAdapter: ConnectivityAdapterImpl(),
             ),
           ),

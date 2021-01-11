@@ -29,6 +29,7 @@ dependencies:
   connectivity: ^2.0.2
   equatable: ^1.2.5
   shared_preferences: ^0.5.12+4
+  mockito: ^4.1.3
 
 
 

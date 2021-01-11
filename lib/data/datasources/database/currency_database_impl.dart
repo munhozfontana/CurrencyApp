@@ -6,7 +6,7 @@ import 'package:conversor_moedas/domain/entities/currency_live.dart';
 import 'package:conversor_moedas/domain/entities/currency.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedPreferencesDatabase implements CurrencyDatabase {
+class CurrencyDatabaseImpl implements CurrencyDatabase {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String lastDataList = "LAST_DATA_LIST";
   String lastDataLive = "LAST_DATA_LIVE";
