@@ -1,6 +1,8 @@
 import 'package:conversor_moedas/core/utils/conectivity_adapter.dart';
-import 'package:conversor_moedas/data/datasources/currency_api.dart';
-import 'package:conversor_moedas/data/repositories/currency_repository.dart';
+import 'package:conversor_moedas/data/datasources/apis/currency_api_impl.dart';
+import 'package:conversor_moedas/data/datasources/database/currency_database_impl.dart';
+import 'package:conversor_moedas/data/datasources/database/repositories/currency_database.dart';
+import 'package:conversor_moedas/data/repositories/currency_repository_impl.dart';
 import 'package:conversor_moedas/domain/usecases/currency_usecase.dart';
 import 'package:conversor_moedas/initial_widget.dart';
 import 'package:conversor_moedas/presentation/providers/conversor_controller.dart';
@@ -24,9 +26,9 @@ class MyApp extends StatelessWidget {
         value: ListCoinsController(
           currencyListUseCase: CurrencyListUseCase(
             currencyRepository: CurrencyRepositoryImpl(
-              currencyoApi: CurrencyApiImpl(),
-              connectivityAdapter: ConnectivityAdapterImpl(),
-            ),
+                currencyoApi: CurrencyApiImpl(),
+                connectivityAdapter: ConnectivityAdapterImpl(),
+                currencyDatabase: SharedPreferencesDatabase()),
           ),
         ),
       ),
@@ -34,12 +36,14 @@ class MyApp extends StatelessWidget {
         value: ConversorController(
           currencyLiveUseCase: CurrencyLiveUseCase(
             currencyRepository: CurrencyRepositoryImpl(
+              currencyDatabase: SharedPreferencesDatabase(),
               currencyoApi: CurrencyApiImpl(),
               connectivityAdapter: ConnectivityAdapterImpl(),
             ),
           ),
           currencyListUseCase: CurrencyListUseCase(
             currencyRepository: CurrencyRepositoryImpl(
+              currencyDatabase: SharedPreferencesDatabase(),
               currencyoApi: CurrencyApiImpl(),
               connectivityAdapter: ConnectivityAdapterImpl(),
             ),

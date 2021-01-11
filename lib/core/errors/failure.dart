@@ -37,3 +37,14 @@ class ValueNullFailure extends Failure {
   @override
   String get message => menssagem;
 }
+
+class DataBaseFailure extends Failure {
+  final String menssagem;
+
+  DataBaseFailure({this.menssagem});
+
+  @override
+  List<Object> get props => [menssagem];
+  @override
+  String get message => menssagem;
+}

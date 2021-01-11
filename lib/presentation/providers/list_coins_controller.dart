@@ -2,6 +2,7 @@ import 'package:conversor_moedas/domain/entities/currency.dart';
 import 'package:conversor_moedas/core/errors/failure.dart';
 import 'package:conversor_moedas/domain/usecases/currency_usecase.dart';
 import 'package:conversor_moedas/domain/usecases/no_params.dart';
+import 'package:conversor_moedas/domain/usecases/params.dart';
 import 'package:conversor_moedas/presentation/providers/utils/loading_controller.dart';
 import 'package:conversor_moedas/presentation/providers/utils/utils_providers.dart';
 import 'package:conversor_moedas/presentation/vo/list_item.dart';
@@ -27,7 +28,7 @@ class ListCoinsController extends LoadingController {
 
   Future<void> init() async {
     changeLoading(true);
-    res = await currencyListUseCase(NoParams());
+    res = await currencyListUseCase(Params(syncLocalBase: true));
     changeLoading(false);
     res.fold(
       (failure) => failure,

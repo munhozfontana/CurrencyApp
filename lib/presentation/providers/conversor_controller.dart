@@ -4,6 +4,7 @@ import 'package:conversor_moedas/domain/entities/currency.dart';
 import 'package:conversor_moedas/domain/entities/currency_live.dart';
 import 'package:conversor_moedas/domain/usecases/currency_usecase.dart';
 import 'package:conversor_moedas/domain/usecases/no_params.dart';
+import 'package:conversor_moedas/domain/usecases/params.dart';
 import 'package:conversor_moedas/presentation/providers/utils/loading_controller.dart';
 import 'package:conversor_moedas/presentation/providers/utils/utils_providers.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,7 +38,7 @@ class ConversorController extends LoadingController {
   Future<void> liveCurrency() async {
     var res = await Future.delayed(
       Duration(milliseconds: 5),
-      () => currencyLiveUseCase(NoParams()),
+      () => currencyLiveUseCase(Params(syncLocalBase: true)),
     );
     res.fold(
       (failure) => print(failure),
@@ -48,8 +49,8 @@ class ConversorController extends LoadingController {
   }
 
   Future<void> listCurrency() async {
-    var res = await Future.delayed(
-        Duration(milliseconds: 5), () => currencyListUseCase(NoParams()));
+    var res = await Future.delayed(Duration(milliseconds: 5),
+        () => currencyListUseCase(Params(syncLocalBase: true)));
     res.fold(
       (failure) => print(failure),
       (response) {

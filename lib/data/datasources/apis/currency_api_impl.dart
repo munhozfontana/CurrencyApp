@@ -3,13 +3,9 @@ import 'dart:convert';
 
 import 'package:conversor_moedas/FakeRequest.dart';
 import 'package:conversor_moedas/core/errors/excptions.dart';
+import 'package:conversor_moedas/data/datasources/apis/repositories/currency_api.dart';
 import 'package:conversor_moedas/domain/entities/currency.dart';
 import 'package:conversor_moedas/domain/entities/currency_live.dart';
-
-abstract class CurrencyApi {
-  Future<CurrencyLive> live();
-  Future<Currency> list();
-}
 
 class CurrencyApiImpl implements CurrencyApi {
   String _host = "https://api.currencylayer.com/";
