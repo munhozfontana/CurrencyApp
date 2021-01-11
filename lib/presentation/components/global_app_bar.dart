@@ -4,7 +4,9 @@ class GlobalAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("provider"),
+      title: Center(
+        child: Text("Coin"),
+      ),
     );
   }
 }

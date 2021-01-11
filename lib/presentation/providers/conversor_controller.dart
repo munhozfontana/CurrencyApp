@@ -82,21 +82,25 @@ class ConversorController extends LoadingController {
       dynamic moedaOrigem = (resLiveCurrency
                   .toJson()['quotes']
                   .entries
-                  .singleWhere((MapEntry item) => '${item.key}' == 'USD${key}')
+                  .singleWhere((MapEntry item) => '${item.key}' == 'USD$key')
               as MapEntry)
           .value;
 
       dynamic moedaDestino = (resLiveCurrency
                   .toJson()['quotes']
                   .entries
-                  .singleWhere((MapEntry item) => '${item.key}' == 'USD${key2}')
+                  .singleWhere((MapEntry item) => '${item.key}' == 'USD$key2')
               as MapEntry)
           .value;
+
+      if (moneyValue == ".") {
+        moneyValue = "0.";
+      }
 
       return _calcCoin(moedaOrigem, moedaDestino, moneyValue)
           .toStringAsFixed(2);
     }
-    return "Escolha a moeda de origem e destino";
+    return "Escolha a moeda de origem e destino e digite";
   }
 
   double _calcCoin(moedaOrigem, moedaDestino, String moneyValue) {

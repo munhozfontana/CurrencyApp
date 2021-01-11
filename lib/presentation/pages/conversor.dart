@@ -47,14 +47,15 @@ class _ConversorState extends State<Conversor> {
                     Container(
                       width: screenSize.width * .45,
                       child: DropdownButton<String>(
+                        isExpanded: true,
                         value: controller.selectFromCountry?.value,
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
                         elevation: 16,
-                        style: TextStyle(color: Colors.deepPurple),
+                        style: TextStyle(color: Colors.blue),
                         underline: Container(
                           height: 2,
-                          color: Colors.deepPurpleAccent,
+                          color: Colors.blue,
                         ),
                         onChanged: controller.changeSelectFromCountry,
                         items: controller.listDropDown,
@@ -63,29 +64,33 @@ class _ConversorState extends State<Conversor> {
                     Container(
                       width: screenSize.width * .45,
                       child: DropdownButton<String>(
+                          isExpanded: true,
                           value: controller.selectToCountry?.value,
                           icon: Icon(Icons.arrow_downward),
                           iconSize: 24,
                           elevation: 16,
-                          style: TextStyle(color: Colors.deepPurple),
+                          style: TextStyle(color: Colors.blue),
                           underline: Container(
                             height: 2,
-                            color: Colors.deepPurpleAccent,
+                            color: Colors.blue,
                           ),
                           onChanged: controller.changeSelectToCountry,
                           items: controller.listDropDown),
                     ),
                   ],
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: FormStyle()
-                      .getInputDecorator(icon: Icon(Icons.attach_money)),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'(^\-?\d*\.?\d*)$')),
-                  ],
-                  onChanged: controller.onChangedMoney,
+                Container(
+                  width: screenSize.width * .96,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: FormStyle()
+                        .getInputDecorator(icon: Icon(Icons.attach_money)),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'(^\-?\d*\.?\d*)$')),
+                    ],
+                    onChanged: controller.onChangedMoney,
+                  ),
                 ),
               ],
             ),

@@ -1,7 +1,5 @@
-import 'package:conversor_moedas/core/styles/forms_style.dart';
 import 'package:conversor_moedas/initial_widget.dart';
 import 'package:conversor_moedas/presentation/providers/list_coins_controller.dart';
-import 'package:conversor_moedas/presentation/providers/utils/utils_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +28,7 @@ class _ListCoinsState extends State<ListCoins> {
                 return Column(
                   children: [
                     Container(
-                      height: constraints.maxHeight * .2,
+                      height: constraints.maxHeight * .15,
                       width: constraints.maxWidth * .9,
                       child: TextFormField(
                         decoration: InputDecoration(
@@ -49,7 +47,7 @@ class _ListCoinsState extends State<ListCoins> {
                       ),
                     ),
                     Container(
-                      height: constraints.maxHeight * .8,
+                      height: constraints.maxHeight * .85,
                       child: ListView.builder(
                         itemCount: controller.filterList.length,
                         itemBuilder: (context, index) {
